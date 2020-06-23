@@ -1,71 +1,53 @@
 import React, { useState } from "react";
-import { Card, CardContent, Typography, TextField, List, ListItem, ListItemText, CardActions, Button } from "@material-ui/core";
-import { Match } from "../../../Types/types";
+import { Card, CardContent, Typography, CardActions, Button, FormControl, Select, MenuItem } from "@material-ui/core";
+import MatchDetailRequest from "./Tipsport/MatchDetailRequest";
+import SportsOfferRequest from "./Tipsport/SportsOfferRequest";
+import MatchesOfferRequest from "./Tipsport/MatchesOfferRequest";
 
 type propsType = {
   createRequest: (url: string, displayUrl: string, keyword: string) => void;
 };
 
-export default function ({ createRequest }: propsType) {
-  const [newTipsportReq, setNewTipsportReq] = useState({ url: "", displayUrl: "", keyword: "" });
-  const [matches, setMatches] = useState<Match[]>([]);
+enum requestTypes {
+  MatchDetails,
+  SportsOffer,
+  MatchesOffer,
+}
 
-  const loadMatches = (url: string) => {
-    fetch(`/tipsport/v1/matches?url=${url}`)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then(setMatches);
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(console.log);
-  };
+export default function ({ createRequest }: propsType) {
+  const emptyRequest = { url: "", displayUrl: "", keyword: "" };
+  const [newTipsportReq, setNewTipsportReq] = useState(emptyRequest);
+  const [selected, setSelected] = useState(requestTypes.MatchDetails);
 
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">New request for tipsport match details</Typography>
+        <Typography variant="h6" style={{ float: "left" }}>
+          New request for Tipsport
+        </Typography>
+        <FormControl style={{ float: "right" }}>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={selected}
+            onChange={(e) => {
+              setSelected(e.target.value as requestTypes);
+              setNewTipsportReq(emptyRequest);
+            }}
+          >
+            <MenuItem value={requestTypes.MatchDetails}>Tipsport match details</MenuItem>
+            <MenuItem value={requestTypes.SportsOffer}>Tipsport sports offer</MenuItem>
+            <MenuItem value={requestTypes.MatchesOffer}>Tipsport matches offer</MenuItem>
+          </Select>
+        </FormControl>
         <br />
-        <TextField label="Category URL" style={{ width: "100%" }} onBlur={(e) => loadMatches(e.target.value)} />
-        {matches.length === 0 ? (
-          <>
-            <br />
-            <br />
-          </>
+        {selected === requestTypes.MatchDetails ? (
+          <MatchDetailRequest newTipsportReq={newTipsportReq} setNewTipsportReq={setNewTipsportReq} />
+        ) : selected === requestTypes.SportsOffer ? (
+          <SportsOfferRequest newTipsportReq={newTipsportReq} setNewTipsportReq={setNewTipsportReq} />
         ) : (
-          <List>
-            {matches.map((match) => (
-              <ListItem
-                key={match.id}
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setNewTipsportReq({
-                    ...newTipsportReq,
-                    url: `https://m.tipsport.cz/rest/offer/v1/matches/${match.id}/event-tables?fromResults=false`,
-                    displayUrl: match.matchUrl,
-                  });
-                }}
-              >
-                <ListItemText primary={match.description} />
-              </ListItem>
-            ))}
-          </List>
+          <MatchesOfferRequest newTipsportReq={newTipsportReq} setNewTipsportReq={setNewTipsportReq} />
         )}
-
-        <TextField
-          label="Url address"
-          disabled={true}
-          value={newTipsportReq.url}
-          onChange={(e) => setNewTipsportReq({ ...newTipsportReq, url: e.target.value })}
-          style={{ width: "100%" }}
-        />
-        <TextField
-          label="Keyword"
-          value={newTipsportReq.keyword}
-          onChange={(e) => setNewTipsportReq({ ...newTipsportReq, keyword: e.target.value })}
-          style={{ width: "100%" }}
-        />
       </CardContent>
       <CardActions style={{ display: "flex" }}>
         <Button
