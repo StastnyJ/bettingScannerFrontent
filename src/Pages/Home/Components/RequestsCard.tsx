@@ -8,7 +8,7 @@ type propsType = {
   requests: Request[];
   loadRequests: () => void;
   deleteRequest: (createdDate: string) => void;
-  createRequest: (url: string, displayUrl: string, keyword: string) => void;
+  createRequest: (url: string, displayUrl: string, keyword: string, email: string) => void;
 };
 
 export default function ({ requests, loadRequests, deleteRequest, createRequest }: propsType) {
@@ -22,6 +22,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
             <TableRow>
               <TableCell>Url</TableCell>
               <TableCell>Keyword</TableCell>
+              <TableCell>Email</TableCell>
               <TableCell>Status</TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -35,6 +36,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
                   </a>
                 </TableCell>
                 <TableCell>{req.keyword}</TableCell>
+                <TableCell>{req.email}</TableCell>
                 <TableCell>{req.finnished ? <Chip label="Finnished" color="primary" /> : <Chip label="Waiting" />}</TableCell>
                 <TableCell>
                   <DeleteIcon
@@ -44,7 +46,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
                   {req.finnished && (
                     <AutorenewIcon
                       style={{ color: "blue", cursor: "pointer", float: "right" }}
-                      onClick={() => createRequest(req.scanUrl, req.displayUrl, req.keyword)}
+                      onClick={() => createRequest(req.scanUrl, req.displayUrl, req.keyword, req.email)}
                     />
                   )}
                 </TableCell>

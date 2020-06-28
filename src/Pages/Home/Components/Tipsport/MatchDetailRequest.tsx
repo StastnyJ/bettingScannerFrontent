@@ -1,25 +1,30 @@
-import React, { useState } from "react";
-import { TextField, List, ListItem, ListItemText } from "@material-ui/core";
+import React, { useState, Dispatch, SetStateAction } from "react";
+import { TextField, List, ListItem, ListItemText, FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
 import { Match } from "../../../../Types/types";
 
 type propsType = {
   newTipsportReq: { url: string; displayUrl: string; keyword: string };
   setNewTipsportReq: (req: { url: string; displayUrl: string; keyword: string }) => void;
+  emails: string[];
+  selectedEmail: string;
+  setSelectedEmail: Dispatch<SetStateAction<string>>;
 };
 
-export default function ({ newTipsportReq, setNewTipsportReq }: propsType) {
+export default function ({ newTipsportReq, setNewTipsportReq, emails, selectedEmail, setSelectedEmail }: propsType) {
   const [matches, setMatches] = useState<Match[]>([]);
 
   const loadMatches = (url: string) => {
-    fetch(`/tipsport/v1/matches?url=${url}`)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then(setMatches);
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(console.log);
+    if (url.length >= 0) {
+      fetch(`/tipsport/v1/matches?url=${url}`)
+        .then((response) => {
+          if (response.ok) {
+            response.json().then(setMatches);
+          } else {
+            console.log(response.statusText);
+          }
+        })
+        .catch(console.log);
+    }
   };
 
   return (
@@ -63,6 +68,23 @@ export default function ({ newTipsportReq, setNewTipsportReq }: propsType) {
         onChange={(e) => setNewTipsportReq({ ...newTipsportReq, keyword: e.target.value })}
         style={{ width: "100%" }}
       />
+      <br />
+      <br />
+      <FormControl style={{ width: "100%" }}>
+        <InputLabel>Email</InputLabel>
+        <Select
+          value={selectedEmail}
+          onChange={(e) => {
+            setSelectedEmail(e.target.value as string);
+          }}
+        >
+          {emails.map((mail) => (
+            <MenuItem key={mail} value={mail}>
+              {mail}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </>
   );
 }
