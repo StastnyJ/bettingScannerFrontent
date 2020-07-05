@@ -3,26 +3,28 @@ import { Card, CardContent, Typography, CardActions, Button, FormControl, Select
 import MatchDetailRequest from "./Tipsport/MatchDetailRequest";
 import SportsOfferRequest from "./Tipsport/SportsOfferRequest";
 import MatchesOfferRequest from "./Tipsport/MatchesOfferRequest";
+import NewMatchesWatcher from "./Tipsport/NewMatchesWatcher";
 
 type propsType = {
-  createRequest: (url: string, displayUrl: string, keyword: string, email: string) => void;
+  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
 };
 
 enum requestTypes {
   MatchDetails,
   SportsOffer,
   MatchesOffer,
+  MatchesWatcher,
 }
 
 export default function ({ createRequest }: propsType) {
-  const emptyRequest = { url: "", displayUrl: "", keyword: "" };
+  const emptyRequest = { apiUrl: "/requests/v1/", url: "", displayUrl: "", keyword: "" };
   const [newTipsportReq, setNewTipsportReq] = useState(emptyRequest);
-  const [selected, setSelected] = useState(requestTypes.MatchDetails);
+  const [selected, setSelected] = useState<requestTypes>(requestTypes.MatchDetails);
   const [selectedEmail, setSelectedEmail] = useState<string>("");
   const [emails, setEmails] = useState<string[]>([]);
 
   const loadEmails = () => {
-    fetch(`/emails/v1/`)
+    fetch("/emails/v1/")
       .then((response) => {
         if (response.ok) {
           response.json().then((emails) => {
@@ -57,6 +59,7 @@ export default function ({ createRequest }: propsType) {
             <MenuItem value={requestTypes.MatchDetails}>Tipsport match details</MenuItem>
             <MenuItem value={requestTypes.SportsOffer}>Tipsport sports offer</MenuItem>
             <MenuItem value={requestTypes.MatchesOffer}>Tipsport matches offer</MenuItem>
+            <MenuItem value={requestTypes.MatchesWatcher}>Tipsport new matches watcher</MenuItem>
           </Select>
         </FormControl>
         <br />
@@ -76,8 +79,16 @@ export default function ({ createRequest }: propsType) {
             selectedEmail={selectedEmail}
             setSelectedEmail={setSelectedEmail}
           />
-        ) : (
+        ) : selected === requestTypes.MatchesOffer ? (
           <MatchesOfferRequest
+            newTipsportReq={newTipsportReq}
+            setNewTipsportReq={setNewTipsportReq}
+            emails={emails}
+            selectedEmail={selectedEmail}
+            setSelectedEmail={setSelectedEmail}
+          />
+        ) : (
+          <NewMatchesWatcher
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
             emails={emails}
@@ -93,8 +104,14 @@ export default function ({ createRequest }: propsType) {
           disabled={newTipsportReq.url.length === 0 || newTipsportReq.keyword.length === 0 || selectedEmail.length === 0}
           style={{ marginLeft: "auto", marginRight: "12px" }}
           onClick={() => {
-            createRequest(newTipsportReq.url, newTipsportReq.displayUrl, newTipsportReq.keyword, selectedEmail);
-            setNewTipsportReq({ keyword: "", url: "", displayUrl: "" });
+            createRequest(
+              newTipsportReq.apiUrl,
+              newTipsportReq.url,
+              newTipsportReq.displayUrl,
+              newTipsportReq.keyword,
+              selectedEmail
+            );
+            setNewTipsportReq(emptyRequest);
           }}
         >
           Add request

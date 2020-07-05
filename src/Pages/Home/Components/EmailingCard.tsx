@@ -68,7 +68,7 @@ export default function () {
           <br />
           <List>
             {emails.map((e) => (
-              <ListItem>
+              <ListItem key={e as string}>
                 <DeleteIcon
                   onClick={() => removeEmail(e)}
                   style={{ color: "red", cursor: "pointer", marginRight: "4px" }}

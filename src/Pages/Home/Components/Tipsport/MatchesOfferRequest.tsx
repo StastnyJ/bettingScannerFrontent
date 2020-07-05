@@ -2,8 +2,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import { TextField, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 
 type propsType = {
-  newTipsportReq: { url: string; displayUrl: string; keyword: string };
-  setNewTipsportReq: (req: { url: string; displayUrl: string; keyword: string }) => void;
+  newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string };
+  setNewTipsportReq: (req: { apiUrl: string; url: string; displayUrl: string; keyword: string }) => void;
   emails: string[];
   selectedEmail: string;
   setSelectedEmail: Dispatch<SetStateAction<string>>;

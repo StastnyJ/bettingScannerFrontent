@@ -8,7 +8,7 @@ type propsType = {
   requests: Request[];
   loadRequests: () => void;
   deleteRequest: (createdDate: string) => void;
-  createRequest: (url: string, displayUrl: string, keyword: string, email: string) => void;
+  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
 };
 
 export default function ({ requests, loadRequests, deleteRequest, createRequest }: propsType) {
@@ -46,7 +46,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
                   {req.finnished && (
                     <AutorenewIcon
                       style={{ color: "blue", cursor: "pointer", float: "right" }}
-                      onClick={() => createRequest(req.scanUrl, req.displayUrl, req.keyword, req.email)}
+                      onClick={() => createRequest("/requests/v1/", req.scanUrl, req.displayUrl, req.keyword, req.email)}
                     />
                   )}
                 </TableCell>

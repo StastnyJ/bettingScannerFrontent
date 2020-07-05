@@ -3,8 +3,8 @@ import { TextField, List, ListItem, ListItemText, FormControl, Select, InputLabe
 import { Match } from "../../../../Types/types";
 
 type propsType = {
-  newTipsportReq: { url: string; displayUrl: string; keyword: string };
-  setNewTipsportReq: (req: { url: string; displayUrl: string; keyword: string }) => void;
+  newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string };
+  setNewTipsportReq: (req: { apiUrl: string; url: string; displayUrl: string; keyword: string }) => void;
   emails: string[];
   selectedEmail: string;
   setSelectedEmail: Dispatch<SetStateAction<string>>;

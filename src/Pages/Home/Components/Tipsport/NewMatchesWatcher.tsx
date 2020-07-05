@@ -10,16 +10,17 @@ type propsType = {
 };
 
 export default function ({ newTipsportReq, setNewTipsportReq, emails, selectedEmail, setSelectedEmail }: propsType) {
-  const tipsportApiUrl = "https://m.tipsport.cz/rest/offer/v2/sports?fromResults=false";
-  if (newTipsportReq.url !== tipsportApiUrl)
-    setNewTipsportReq({ ...newTipsportReq, url: tipsportApiUrl, displayUrl: "Sports offer in left menu", keyword: "" });
+  if (newTipsportReq.apiUrl !== "/requests/v1/withStatus/")
+    setNewTipsportReq({ ...newTipsportReq, apiUrl: "/requests/v1/withStatus/" });
 
   return (
     <>
       <TextField
-        label="Keyword"
-        value={newTipsportReq.keyword}
-        onChange={(e) => setNewTipsportReq({ ...newTipsportReq, keyword: e.target.value })}
+        label="Category URL"
+        value={newTipsportReq.url}
+        onChange={(e) =>
+          setNewTipsportReq({ ...newTipsportReq, url: e.target.value, displayUrl: e.target.value, keyword: "Watchnig changes" })
+        }
         style={{ width: "100%" }}
       />
       <br />

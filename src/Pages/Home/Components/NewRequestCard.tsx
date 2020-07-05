@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 
 type propsType = {
-  createRequest: (url: string, displayUrl: string, keyword: string, email: string) => void;
+  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
 };
 
 export default function ({ createRequest }: propsType) {
@@ -80,7 +80,7 @@ export default function ({ createRequest }: propsType) {
           style={{ marginLeft: "auto", marginRight: "12px" }}
           disabled={newReq.url.length === 0 || newReq.keyword.length === 0 || selectedEmail.length === 0}
           onClick={() => {
-            createRequest(newReq.url, "", newReq.keyword, selectedEmail);
+            createRequest("/requests/v1/", newReq.url, "", newReq.keyword, selectedEmail);
             setNewReq({ keyword: "", url: "" });
           }}
         >

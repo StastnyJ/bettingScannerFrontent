@@ -21,8 +21,8 @@ export default function () {
       .catch(console.log);
   };
 
-  const createRequest = (url: string, displayUrl: string, keyword: string, email: string) => {
-    fetch(`/requests/v1/?url=${url}&keyword=${keyword}&matchUrl=${displayUrl}&email=${email}`, {
+  const createRequest = (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => {
+    fetch(`${apiUrl}?url=${url}&keyword=${keyword}&matchUrl=${displayUrl}&email=${email}`, {
       method: "post",
     })
       .then((response) => {
