@@ -11,6 +11,7 @@ import {
   FormControl,
   InputLabel,
 } from "@material-ui/core";
+import { Chat } from "../../../Types/types";
 
 type propsType = {
   createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
@@ -18,16 +19,16 @@ type propsType = {
 
 export default function ({ createRequest }: propsType) {
   const [newReq, setNewReq] = useState({ url: "", keyword: "" });
-  const [emails, setEmails] = useState<string[]>([]);
-  const [selectedEmail, setSelectedEmail] = useState<string>("");
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [selectedChatId, setSelectedChat] = useState<string>("");
 
   const loadEmails = () => {
-    fetch(`/emails/v1/`)
+    fetch(`/notifications/v1/getChats`)
       .then((response) => {
         if (response.ok) {
-          response.json().then((emails) => {
-            setEmails(emails);
-            setSelectedEmail(emails[0]);
+          response.json().then((chats) => {
+            setChats(chats);
+            setSelectedChat(chats[0].chatId);
           });
         } else {
           console.log(response.statusText);
@@ -58,16 +59,16 @@ export default function ({ createRequest }: propsType) {
         <br />
         <br />
         <FormControl style={{ width: "100%" }}>
-          <InputLabel>Email</InputLabel>
+          <InputLabel>Notification client</InputLabel>
           <Select
-            value={selectedEmail}
+            value={selectedChatId}
             onChange={(e) => {
-              setSelectedEmail(e.target.value as string);
+              setSelectedChat(e.target.value as string);
             }}
           >
-            {emails.map((mail) => (
-              <MenuItem key={mail} value={mail}>
-                {mail}
+            {chats.map((chat) => (
+              <MenuItem key={chat.chatId} value={chat.chatId}>
+                {chat.userName} ({chat.chatId})
               </MenuItem>
             ))}
           </Select>
@@ -78,9 +79,9 @@ export default function ({ createRequest }: propsType) {
           variant="contained"
           color="primary"
           style={{ marginLeft: "auto", marginRight: "12px" }}
-          disabled={newReq.url.length === 0 || newReq.keyword.length === 0 || selectedEmail.length === 0}
+          disabled={newReq.url.length === 0 || newReq.keyword.length === 0 || selectedChatId.length === 0}
           onClick={() => {
-            createRequest("/requests/v1/", newReq.url, "", newReq.keyword, selectedEmail);
+            createRequest("/requests/v1/", newReq.url, "", newReq.keyword, selectedChatId);
             setNewReq({ keyword: "", url: "" });
           }}
         >

@@ -4,6 +4,7 @@ import MatchDetailRequest from "./Tipsport/MatchDetailRequest";
 import SportsOfferRequest from "./Tipsport/SportsOfferRequest";
 import MatchesOfferRequest from "./Tipsport/MatchesOfferRequest";
 import NewMatchesWatcher from "./Tipsport/NewMatchesWatcher";
+import { Chat } from "../../../Types/types";
 
 type propsType = {
   createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
@@ -20,16 +21,16 @@ export default function ({ createRequest }: propsType) {
   const emptyRequest = { apiUrl: "/requests/v1/", url: "", displayUrl: "", keyword: "" };
   const [newTipsportReq, setNewTipsportReq] = useState(emptyRequest);
   const [selected, setSelected] = useState<requestTypes>(requestTypes.MatchDetails);
-  const [selectedEmail, setSelectedEmail] = useState<string>("");
-  const [emails, setEmails] = useState<string[]>([]);
+  const [selectedChatId, setSelectedChat] = useState<string>("");
+  const [chats, setChats] = useState<Chat[]>([]);
 
   const loadEmails = () => {
-    fetch("/emails/v1/")
+    fetch("/notifications/v1/getChats")
       .then((response) => {
         if (response.ok) {
-          response.json().then((emails) => {
-            setEmails(emails);
-            setSelectedEmail(emails[0]);
+          response.json().then((chats) => {
+            setChats(chats);
+            setSelectedChat(chats[0].chatId);
           });
         } else {
           console.log(response.statusText);
@@ -67,33 +68,33 @@ export default function ({ createRequest }: propsType) {
           <MatchDetailRequest
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            emails={emails}
-            selectedEmail={selectedEmail}
-            setSelectedEmail={setSelectedEmail}
+            chats={chats}
+            selectedChatId={selectedChatId}
+            setSelectedChat={setSelectedChat}
           />
         ) : selected === requestTypes.SportsOffer ? (
           <SportsOfferRequest
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            emails={emails}
-            selectedEmail={selectedEmail}
-            setSelectedEmail={setSelectedEmail}
+            chats={chats}
+            selectedChatId={selectedChatId}
+            setSelectedChat={setSelectedChat}
           />
         ) : selected === requestTypes.MatchesOffer ? (
           <MatchesOfferRequest
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            emails={emails}
-            selectedEmail={selectedEmail}
-            setSelectedEmail={setSelectedEmail}
+            chats={chats}
+            selectedChatId={selectedChatId}
+            setSelectedChat={setSelectedChat}
           />
         ) : (
           <NewMatchesWatcher
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            emails={emails}
-            selectedEmail={selectedEmail}
-            setSelectedEmail={setSelectedEmail}
+            chats={chats}
+            selectedChatId={selectedChatId}
+            setSelectedChat={setSelectedChat}
           />
         )}
       </CardContent>
@@ -101,7 +102,7 @@ export default function ({ createRequest }: propsType) {
         <Button
           variant="contained"
           color="primary"
-          disabled={newTipsportReq.url.length === 0 || newTipsportReq.keyword.length === 0 || selectedEmail.length === 0}
+          disabled={newTipsportReq.url.length === 0 || newTipsportReq.keyword.length === 0 || selectedChatId.length === 0}
           style={{ marginLeft: "auto", marginRight: "12px" }}
           onClick={() => {
             createRequest(
@@ -109,7 +110,7 @@ export default function ({ createRequest }: propsType) {
               newTipsportReq.url,
               newTipsportReq.displayUrl,
               newTipsportReq.keyword,
-              selectedEmail
+              selectedChatId
             );
             setNewTipsportReq(emptyRequest);
           }}

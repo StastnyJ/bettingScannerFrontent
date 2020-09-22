@@ -22,7 +22,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
             <TableRow>
               <TableCell>Url</TableCell>
               <TableCell>Keyword</TableCell>
-              <TableCell>Email</TableCell>
+              <TableCell>Notification Id</TableCell>
               <TableCell>Status</TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -36,7 +36,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
                   </a>
                 </TableCell>
                 <TableCell>{req.keyword}</TableCell>
-                <TableCell>{req.email}</TableCell>
+                <TableCell>{req.chatId}</TableCell>
                 <TableCell>{req.finnished ? <Chip label="Finnished" color="primary" /> : <Chip label="Waiting" />}</TableCell>
                 <TableCell>
                   <DeleteIcon
@@ -46,7 +46,7 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
                   {req.finnished && (
                     <AutorenewIcon
                       style={{ color: "blue", cursor: "pointer", float: "right" }}
-                      onClick={() => createRequest("/requests/v1/", req.scanUrl, req.displayUrl, req.keyword, req.email)}
+                      onClick={() => createRequest("/requests/v1/", req.scanUrl, req.displayUrl, req.keyword, req.chatId)}
                     />
                   )}
                 </TableCell>

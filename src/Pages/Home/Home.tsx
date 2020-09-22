@@ -4,7 +4,7 @@ import { Request } from "../../Types/types";
 import NewRequestCard from "./Components/NewRequestCard";
 import NewTipsportRequestCard from "./Components/NewTipsportRequestCard";
 import RequestsCard from "./Components/RequestsCard";
-import EmailingCard from "./Components/EmailingCard";
+import ChatsCard from "./Components/ChatsCard";
 
 export default function () {
   const [requests, setRequests] = useState<Request[]>([]);
@@ -81,7 +81,7 @@ export default function () {
         </Grid>
       )}
       <Grid item xs={12} lg={5}>
-        <EmailingCard />
+        <ChatsCard />
       </Grid>
     </Grid>
   );

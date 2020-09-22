@@ -1,15 +1,16 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { TextField, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { Chat } from "../../../../Types/types";
 
 type propsType = {
   newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string };
   setNewTipsportReq: (req: { apiUrl: string; url: string; displayUrl: string; keyword: string }) => void;
-  emails: string[];
-  selectedEmail: string;
-  setSelectedEmail: Dispatch<SetStateAction<string>>;
+  chats: Chat[];
+  selectedChatId: string;
+  setSelectedChat: Dispatch<SetStateAction<string>>;
 };
 
-export default function ({ newTipsportReq, setNewTipsportReq, emails, selectedEmail, setSelectedEmail }: propsType) {
+export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
   const tipsportApiUrl = "https://m.tipsport.cz/rest/offer/v2/sports?fromResults=false";
   if (newTipsportReq.url !== tipsportApiUrl)
     setNewTipsportReq({ ...newTipsportReq, url: tipsportApiUrl, displayUrl: "Sports offer in left menu", keyword: "" });
@@ -25,16 +26,16 @@ export default function ({ newTipsportReq, setNewTipsportReq, emails, selectedEm
       <br />
       <br />
       <FormControl style={{ width: "100%" }}>
-        <InputLabel>Email</InputLabel>
+        <InputLabel>Notification clinet</InputLabel>
         <Select
-          value={selectedEmail}
+          value={selectedChatId}
           onChange={(e) => {
-            setSelectedEmail(e.target.value as string);
+            setSelectedChat(e.target.value as string);
           }}
         >
-          {emails.map((mail) => (
-            <MenuItem key={mail} value={mail}>
-              {mail}
+          {chats.map((chat) => (
+            <MenuItem key={chat.chatId} value={chat.chatId}>
+              {chat.userName} ({chat.chatId})
             </MenuItem>
           ))}
         </Select>

@@ -1,13 +1,13 @@
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { TextField, List, ListItem, ListItemText, FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
-import { Match } from "../../../../Types/types";
+import { Chat, Match } from "../../../../Types/types";
 
 type propsType = {
   newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string };
   setNewTipsportReq: (req: { apiUrl: string; url: string; displayUrl: string; keyword: string }) => void;
-  emails: string[];
-  selectedEmail: string;
-  setSelectedEmail: Dispatch<SetStateAction<string>>;
+  chats: Chat[];
+  selectedChatId: string;
+  setSelectedChat: Dispatch<SetStateAction<string>>;
 };
 
 enum categoryTypes {
@@ -22,7 +22,7 @@ enum categoryTypes {
   MATCH = "MATCH",
 }
 
-export default function ({ newTipsportReq, setNewTipsportReq, emails, selectedEmail, setSelectedEmail }: propsType) {
+export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
   const [matches, setMatches] = useState<Match[]>([]);
   const [category, setCategory] = useState<categoryTypes>(categoryTypes.COMPETITION);
 
@@ -107,16 +107,16 @@ export default function ({ newTipsportReq, setNewTipsportReq, emails, selectedEm
       <br />
       <br />
       <FormControl style={{ width: "100%" }}>
-        <InputLabel>Email</InputLabel>
+        <InputLabel>Notification client</InputLabel>
         <Select
-          value={selectedEmail}
+          value={selectedChatId}
           onChange={(e) => {
-            setSelectedEmail(e.target.value as string);
+            setSelectedChat(e.target.value as string);
           }}
         >
-          {emails.map((mail) => (
-            <MenuItem key={mail} value={mail}>
-              {mail}
+          {chats.map((chat) => (
+            <MenuItem key={chat.chatId} value={chat.chatId}>
+              {chat.userName} ({chat.chatId})
             </MenuItem>
           ))}
         </Select>
