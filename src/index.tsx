@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "./styles/index.css";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,3 +20,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+serviceWorker.register();
