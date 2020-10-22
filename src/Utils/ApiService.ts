@@ -24,6 +24,7 @@ class ApiService {
   }
 
   public async get(url: string, params?: { [index: string]: any }, options?: FetchOptions) {
+    if (url.startsWith("/")) url = url.substring(1);
     const initReq: RequestInit = {
       headers: {
         "Content-Type": "application/json",
@@ -33,6 +34,7 @@ class ApiService {
   }
 
   public async post(url: string, params: { [index: string]: any }, data?: any, options?: FetchOptions) {
+    if (url.startsWith("/")) url = url.substring(1);
     const initReq: RequestInit = {
       method: "post",
       headers: {
@@ -44,6 +46,7 @@ class ApiService {
   }
 
   public async put(url: string, params?: { [index: string]: any }, data?: any, options?: FetchOptions) {
+    if (url.startsWith("/")) url = url.substring(1);
     const initReq: RequestInit = {
       method: "put",
       headers: {
@@ -56,6 +59,7 @@ class ApiService {
   }
 
   public async delete(url: string, params?: { [index: string]: any }, data?: any, options?: FetchOptions) {
+    if (url.startsWith("/")) url = url.substring(1);
     const initReq: RequestInit = {
       method: "delete",
       headers: {
@@ -68,6 +72,7 @@ class ApiService {
   }
 
   public async uploadFile(url: string, file: File, params?: { [index: string]: any }, options?: FetchOptions) {
+    if (url.startsWith("/")) url = url.substring(1);
     const formData = new FormData();
     formData.append("file", file);
     fetch(formatUrl(`${this._apiUrl}${url}`, params), {
@@ -88,7 +93,6 @@ class ApiService {
 
 function basicFetch(initReq: RequestInit, url: string, params?: { [index: string]: any }, options?: FetchOptions) {
   if (options === undefined) options = { error: () => {}, success: () => {} };
-  if (url.startsWith("/")) url = url.substring(1);
 
   return new Promise(async (resolve, reject) => {
     fetch(formatUrl(url, params), initReq)
