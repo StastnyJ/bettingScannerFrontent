@@ -1,6 +1,7 @@
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { TextField, List, ListItem, ListItemText, FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
 import { Chat, Match } from "../../../../Types/types";
+import { api } from "../../../../Utils/ApiService";
 
 type propsType = {
   newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string };
@@ -28,15 +29,17 @@ export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedCha
 
   const loadMatches = (url: string) => {
     if (url.length >= 0) {
-      fetch(`/tipsport/v1/matches?url=${url}&categoryType=${category}`)
-        .then((response) => {
-          if (response.ok) {
-            response.json().then(setMatches);
-          } else {
-            console.log(response.statusText);
-          }
-        })
-        .catch(console.log);
+      api.get(
+        "tipsport/v1/matches",
+        {
+          url: url,
+          categoryType: category,
+        },
+        {
+          success: setMatches,
+          error: console.log,
+        }
+      );
     }
   };
 

@@ -4,21 +4,17 @@ import MuiAlert from "@material-ui/lab/Alert";
 // import DeleteIcon from "@material-ui/icons/Delete";
 import EmailIcon from "@material-ui/icons/Email";
 import { Chat } from "../../../Types/types";
+import { api } from "../../../Utils/ApiService";
 
 export default function () {
   const [chats, setChats] = useState<Chat[]>([]);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   const loadChats = () => {
-    fetch(`/notifications/v1/getChats`)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then(setChats);
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(console.log);
+    api.get("notifications/v1/getChats", undefined, {
+      success: setChats,
+      error: console.log,
+    });
   };
 
   // const removeChat = (email: String) => {
@@ -34,20 +30,20 @@ export default function () {
   // };
 
   const testNotification = (chatId: String) => {
-    fetch(`/notifications/v1/test?chatId=${chatId}`, { method: "POST" })
-      .then((response) => {
-        if (response.ok) {
-          setOpenSuccess(true);
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(console.log);
+    api.post(
+      "notifications/v1/test",
+      {
+        chatId: chatId,
+      },
+      undefined,
+      {
+        success: () => setOpenSuccess(true),
+        error: console.log,
+      }
+    );
   };
 
   useEffect(loadChats, []);
-
-  console.log(chats);
 
   return (
     <>

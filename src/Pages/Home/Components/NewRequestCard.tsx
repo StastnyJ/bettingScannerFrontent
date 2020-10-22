@@ -12,6 +12,7 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import { Chat } from "../../../Types/types";
+import { api } from "../../../Utils/ApiService";
 
 type propsType = {
   createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
@@ -23,18 +24,13 @@ export default function ({ createRequest }: propsType) {
   const [selectedChatId, setSelectedChat] = useState<string>("");
 
   const loadEmails = () => {
-    fetch(`/notifications/v1/getChats`)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((chats) => {
-            setChats(chats);
-            setSelectedChat(chats[0].chatId);
-          });
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(console.log);
+    api.get("notifications/v1/getChats", undefined, {
+      success: (chats) => {
+        setChats(chats);
+        setSelectedChat(chats[0].chatId);
+      },
+      error: console.log,
+    });
   };
 
   useEffect(loadEmails, []);

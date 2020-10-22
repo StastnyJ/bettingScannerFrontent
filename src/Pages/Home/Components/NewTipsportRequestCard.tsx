@@ -5,6 +5,7 @@ import SportsOfferRequest from "./Tipsport/SportsOfferRequest";
 import MatchesOfferRequest from "./Tipsport/MatchesOfferRequest";
 import NewMatchesWatcher from "./Tipsport/NewMatchesWatcher";
 import { Chat } from "../../../Types/types";
+import { api } from "../../../Utils/ApiService";
 
 type propsType = {
   createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
@@ -25,18 +26,13 @@ export default function ({ createRequest }: propsType) {
   const [chats, setChats] = useState<Chat[]>([]);
 
   const loadEmails = () => {
-    fetch("/notifications/v1/getChats")
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((chats) => {
-            setChats(chats);
-            setSelectedChat(chats[0].chatId);
-          });
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(console.log);
+    api.get("notifications/v1/getChats", undefined, {
+      success: (chats) => {
+        setChats(chats);
+        setSelectedChat(chats[0].chatId);
+      },
+      error: console.log,
+    });
   };
 
   useEffect(loadEmails, []);

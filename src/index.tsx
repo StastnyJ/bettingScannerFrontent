@@ -6,18 +6,16 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MuiThemeProvider
-      theme={createMuiTheme({
-        palette: {
-          primary: { main: "#343a40" },
-          secondary: { main: "#ffffff" },
-        },
-      })}
-    >
-      <App />
-    </MuiThemeProvider>
-  </React.StrictMode>,
+  <MuiThemeProvider
+    theme={createMuiTheme({
+      palette: {
+        primary: { main: "#343a40" },
+        secondary: { main: "#ffffff" },
+      },
+    })}
+  >
+    <App />
+  </MuiThemeProvider>,
   document.getElementById("root")
 );
 
