@@ -120,7 +120,7 @@ function basicFetch(initReq: RequestInit, url: string, params?: { [index: string
   });
 }
 
-const apiUrl = "http://159.89.4.84:8080/";
+const apiUrl = "https://api.scanner.stastnyjakub.com/";
 
 const api: ApiService = new ApiService();
 
