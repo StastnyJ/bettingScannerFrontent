@@ -64,7 +64,7 @@ export default function ({ createRequest }: propsType) {
           >
             {chats.map((chat) => (
               <MenuItem key={chat.chatId} value={chat.chatId}>
-                {chat.userName} ({chat.chatId})
+                {chat.name} ({chat.chatId})
               </MenuItem>
             ))}
           </Select>

@@ -17,7 +17,14 @@ export default function () {
     });
   };
 
-  const createRequest = (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => {
+  const createRequest = (
+    apiUrl: string,
+    url: string,
+    displayUrl: string,
+    keyword?: string,
+    email?: string,
+    category?: string
+  ) => {
     api.post(
       apiUrl,
       {
@@ -25,6 +32,7 @@ export default function () {
         keyword: keyword,
         matchUrl: displayUrl,
         email: email,
+        category: category,
       },
       undefined,
       {
@@ -34,15 +42,15 @@ export default function () {
     );
   };
 
-  const deleteRequest = (createdDate: string) => {
+  const deleteRequest = (id: number) => {
     api.delete(
       "requests/v1/",
       {
-        date: createdDate,
+        id: id,
       },
       undefined,
       {
-        success: () => setRequests(requests.filter((req) => req.createdDate !== createdDate)),
+        success: () => setRequests(requests.filter((req) => req.id !== id)),
         error: console.log,
       }
     );

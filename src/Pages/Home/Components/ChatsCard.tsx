@@ -62,7 +62,7 @@ export default function () {
                   onClick={() => testNotification(ch.chatId)}
                   style={{ cursor: "pointer", marginRight: "24px" }}
                 ></EmailIcon>
-                {ch.userName} ({ch.chatId})
+                {ch.name} ({ch.chatId})
               </ListItem>
             ))}
           </List>

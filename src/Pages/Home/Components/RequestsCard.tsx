@@ -7,8 +7,8 @@ import { Request } from "../../../Types/types";
 type propsType = {
   requests: Request[];
   loadRequests: () => void;
-  deleteRequest: (createdDate: string) => void;
-  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
+  deleteRequest: (id: number) => void;
+  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword?: string, email?: string) => void;
 };
 
 export default function ({ requests, loadRequests, deleteRequest, createRequest }: propsType) {
@@ -35,13 +35,13 @@ export default function ({ requests, loadRequests, deleteRequest, createRequest 
                     {req.displayUrl}
                   </a>
                 </TableCell>
-                <TableCell>{req.keyword}</TableCell>
+                <TableCell>{req.keyword || "Watching status"}</TableCell>
                 <TableCell>{req.chatId}</TableCell>
                 <TableCell>{req.finnished ? <Chip label="Finnished" color="primary" /> : <Chip label="Waiting" />}</TableCell>
                 <TableCell>
                   <DeleteIcon
                     style={{ color: "red", cursor: "pointer", float: "right" }}
-                    onClick={() => deleteRequest(req.createdDate)}
+                    onClick={() => deleteRequest(req.id)}
                   />
                   {req.finnished && (
                     <AutorenewIcon

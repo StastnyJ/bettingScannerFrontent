@@ -46,7 +46,7 @@ export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedCha
         >
           {chats.map((chat) => (
             <MenuItem key={chat.chatId} value={chat.chatId}>
-              {chat.userName} ({chat.chatId})
+              {chat.name} ({chat.chatId})
             </MenuItem>
           ))}
         </Select>

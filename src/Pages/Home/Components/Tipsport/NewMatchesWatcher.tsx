@@ -1,32 +1,25 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { TextField, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { Chat } from "../../../../Types/types";
+import { categoryTypes } from "../NewTipsportRequestCard";
 
 type propsType = {
-  newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string };
-  setNewTipsportReq: (req: { apiUrl: string; url: string; displayUrl: string; keyword: string }) => void;
+  newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string; category?: categoryTypes };
+  setNewTipsportReq: (req: {
+    apiUrl: string;
+    url: string;
+    displayUrl: string;
+    keyword: string;
+    category?: categoryTypes;
+  }) => void;
   chats: Chat[];
   selectedChatId: string;
   setSelectedChat: Dispatch<SetStateAction<string>>;
 };
 
-enum categoryTypes {
-  ROOT = "ROOT",
-  CATEGORY = "CATEGORY",
-  SELECTION = "SELECTION",
-  SUPERSPORT = "SUPERSPORT",
-  SUPERGROUP = "SUPERGROUP",
-  SPORT = "SPORT",
-  GROUP = "GROUP",
-  COMPETITION = "COMPETITION",
-  MATCH = "MATCH",
-}
-
 export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
   if (newTipsportReq.apiUrl !== "/requests/v1/withStatus/")
     setNewTipsportReq({ ...newTipsportReq, apiUrl: "/requests/v1/withStatus/" });
-
-  const [category, setCategory] = useState<categoryTypes>(categoryTypes.COMPETITION);
 
   return (
     <>
@@ -37,9 +30,9 @@ export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedCha
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={category}
+          value={newTipsportReq.category}
           onChange={(e) => {
-            setCategory(e.target.value as categoryTypes);
+            setNewTipsportReq({ ...newTipsportReq, category: e.target.value as categoryTypes });
           }}
         >
           <MenuItem value={categoryTypes.ROOT}>Root</MenuItem>
@@ -59,7 +52,7 @@ export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedCha
         onChange={(e) =>
           setNewTipsportReq({
             ...newTipsportReq,
-            url: e.target.value + "<categorySeparator>" + category,
+            url: e.target.value,
             displayUrl: e.target.value,
             keyword: "Watchnig changes",
           })
@@ -78,7 +71,7 @@ export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedCha
         >
           {chats.map((chat) => (
             <MenuItem key={chat.chatId} value={chat.chatId}>
-              {chat.userName} ({chat.chatId})
+              {chat.name} ({chat.chatId})
             </MenuItem>
           ))}
         </Select>

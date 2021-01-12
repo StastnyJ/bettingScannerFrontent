@@ -1,11 +1,17 @@
-export type Request = {
+export interface Request {
+  id: number;
   scanUrl: string;
   displayUrl: string;
-  keyword: string;
+  keyword?: string;
   chatId: string;
-  createdDate: string;
+  userId?: string;
   finnished: boolean;
-};
+  visibe: boolean;
+  createdDate: string;
+  tipsportCategory?: string;
+  state?: string;
+  requestType: "NORMAL" | "STATE";
+}
 
 export type Match = {
   description: string;
@@ -15,5 +21,6 @@ export type Match = {
 
 export type Chat = {
   chatId: string;
-  userName: string;
+  name: string;
+  visible: Boolean;
 };

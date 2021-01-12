@@ -8,7 +8,7 @@ import { Chat } from "../../../Types/types";
 import { api } from "../../../Utils/ApiService";
 
 type propsType = {
-  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
+  createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string, category: string) => void;
 };
 
 enum requestTypes {
@@ -18,9 +18,27 @@ enum requestTypes {
   MatchesWatcher,
 }
 
+export enum categoryTypes {
+  ROOT = "ROOT",
+  CATEGORY = "CATEGORY",
+  SELECTION = "SELECTION",
+  SUPERSPORT = "SUPERSPORT",
+  SUPERGROUP = "SUPERGROUP",
+  SPORT = "SPORT",
+  GROUP = "GROUP",
+  COMPETITION = "COMPETITION",
+  MATCH = "MATCH",
+}
+
 export default function ({ createRequest }: propsType) {
-  const emptyRequest = { apiUrl: "/requests/v1/", url: "", displayUrl: "", keyword: "" };
-  const [newTipsportReq, setNewTipsportReq] = useState(emptyRequest);
+  const emptyRequest = { apiUrl: "/requests/v1/", url: "", displayUrl: "", keyword: "", category: categoryTypes.COMPETITION };
+  const [newTipsportReq, setNewTipsportReq] = useState<{
+    apiUrl: string;
+    url: string;
+    displayUrl: string;
+    keyword: string;
+    category?: categoryTypes;
+  }>(emptyRequest);
   const [selected, setSelected] = useState<requestTypes>(requestTypes.MatchDetails);
   const [selectedChatId, setSelectedChat] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
@@ -106,7 +124,8 @@ export default function ({ createRequest }: propsType) {
               newTipsportReq.url,
               newTipsportReq.displayUrl,
               newTipsportReq.keyword,
-              selectedChatId
+              selectedChatId,
+              newTipsportReq.category || ""
             );
             setNewTipsportReq(emptyRequest);
           }}
