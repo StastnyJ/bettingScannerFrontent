@@ -6,15 +6,24 @@ import NewTipsportRequestCard from "./Components/NewTipsportRequestCard";
 import RequestsCard from "./Components/RequestsCard";
 import ChatsCard from "./Components/ChatsCard";
 import { api } from "../../Utils/ApiService";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function () {
+  const admins = ["facebook|2062643430536652"];
+
+  const { isAuthenticated, user } = useAuth0();
   const [requests, setRequests] = useState<Request[]>([]);
 
+  const isAdmin = isAuthenticated && admins.includes(user.sub);
   const loadRequests = () => {
-    api.get(`requests/v1/all`, undefined, {
-      success: setRequests,
-      error: console.log,
-    });
+    api.get(
+      `requests/v1/all`,
+      { visibleOnly: false },
+      {
+        success: setRequests,
+        error: console.log,
+      }
+    );
   };
 
   const createRequest = (
@@ -56,29 +65,30 @@ export default function () {
     );
   };
 
-  useEffect(loadRequests, []);
+  useEffect(loadRequests, [isAuthenticated]);
 
   return (
     <Grid container className="page-container">
       {requests.length === 0 && <Grid item xs={12} lg={1}></Grid>}
       <Grid item xs={12} lg={5} style={{ padding: 16 }}>
-        <NewRequestCard createRequest={createRequest} />
+        <NewRequestCard createRequest={createRequest} isAdmin={isAdmin} />
         <br />
         <br />
-        <NewTipsportRequestCard createRequest={createRequest} />
+        <NewTipsportRequestCard createRequest={createRequest} isAdmin={isAdmin} />
       </Grid>
       {requests.length > 0 && (
         <Grid item xs={12} lg={7} style={{ padding: 16 }}>
           <RequestsCard
             requests={requests}
             deleteRequest={deleteRequest}
-            loadRequests={loadRequests}
+            setRequests={setRequests}
             createRequest={createRequest}
+            isAdmin={isAdmin}
           />
         </Grid>
       )}
       <Grid item xs={12} lg={5} style={{ padding: 16 }}>
-        <ChatsCard />
+        <ChatsCard isAdmin={isAdmin} />
       </Grid>
     </Grid>
   );

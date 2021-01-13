@@ -16,21 +16,26 @@ import { api } from "../../../Utils/ApiService";
 
 type propsType = {
   createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string) => void;
+  isAdmin: boolean;
 };
 
-export default function ({ createRequest }: propsType) {
+export default function ({ createRequest, isAdmin }: propsType) {
   const [newReq, setNewReq] = useState({ url: "", keyword: "" });
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChatId, setSelectedChat] = useState<string>("");
 
   const loadEmails = () => {
-    api.get("notifications/v1/getChats", undefined, {
-      success: (chats) => {
-        setChats(chats);
-        setSelectedChat(chats[0].chatId);
-      },
-      error: console.log,
-    });
+    api.get(
+      "notifications/v1/getChats",
+      { visibleOnly: false },
+      {
+        success: (chats: Chat[]) => {
+          setChats(chats);
+          setSelectedChat(chats.filter((ch) => isAdmin || ch.visible)[0].chatId);
+        },
+        error: console.log,
+      }
+    );
   };
 
   useEffect(loadEmails, []);
@@ -62,11 +67,13 @@ export default function ({ createRequest }: propsType) {
               setSelectedChat(e.target.value as string);
             }}
           >
-            {chats.map((chat) => (
-              <MenuItem key={chat.chatId} value={chat.chatId}>
-                {chat.name} ({chat.chatId})
-              </MenuItem>
-            ))}
+            {chats
+              .filter((ch) => isAdmin || ch.visible)
+              .map((chat) => (
+                <MenuItem key={chat.chatId} value={chat.chatId}>
+                  {chat.name} ({chat.chatId})
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
       </CardContent>

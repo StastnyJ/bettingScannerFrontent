@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Typography, Snackbar, List, ListItem } from "@material-ui/core";
+import { Card, CardContent, Typography, Snackbar, List, ListItem, IconButton, TextField } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 // import DeleteIcon from "@material-ui/icons/Delete";
 import EmailIcon from "@material-ui/icons/Email";
 import { Chat } from "../../../Types/types";
 import { api } from "../../../Utils/ApiService";
+import { Delete, Visibility, VisibilityOff } from "@material-ui/icons";
 
-export default function () {
+export default function ({ isAdmin }: { isAdmin: boolean }) {
   const [chats, setChats] = useState<Chat[]>([]);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   const loadChats = () => {
-    api.get("notifications/v1/getChats", undefined, {
-      success: setChats,
-      error: console.log,
-    });
+    api.get(
+      "notifications/v1/getChats",
+      { visibleOnly: false },
+      {
+        success: setChats,
+        error: console.log,
+      }
+    );
   };
 
-  // const removeChat = (email: String) => {
-  //   fetch(`/emails/v1/?email=${email}`, { method: "DELETE" })
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         setEmails(emails.filter((e) => email !== e));
-  //       } else {
-  //         console.log(response.statusText);
-  //       }
-  //     })
-  //     .catch(console.log);
-  // };
+  const removeChat = (chatId: String) => {
+    api.delete("/notifications/v1/", { id: chatId }, null, {
+      success: () => setChats(chats.filter((ch) => ch.chatId !== chatId)),
+      error: () => alert("chyba"),
+    });
+  };
 
   const testNotification = (chatId: String) => {
     api.post(
@@ -52,19 +52,52 @@ export default function () {
           <Typography variant="h6">Connected notification clients</Typography>
           <br />
           <List>
-            {chats.map((ch) => (
-              <ListItem key={ch.chatId}>
-                {/* <DeleteIcon
-                  // onClick={() => removeChat(e)}
-                  style={{ color: "red", cursor: "pointer", marginRight: "4px" }}
-                ></DeleteIcon>{" "} */}
-                <EmailIcon
-                  onClick={() => testNotification(ch.chatId)}
-                  style={{ cursor: "pointer", marginRight: "24px" }}
-                ></EmailIcon>
-                {ch.name} ({ch.chatId})
-              </ListItem>
-            ))}
+            {chats
+              .filter((ch) => isAdmin || ch.visible)
+              .map((ch) => (
+                <ListItem key={ch.chatId}>
+                  {isAdmin && (
+                    <>
+                      <Delete
+                        onClick={() => removeChat(ch.chatId)}
+                        style={{ color: "red", cursor: "pointer", marginRight: "4px" }}
+                      />
+                      <IconButton
+                        aria-label="toggle visibility"
+                        onClick={() =>
+                          api.post("/notifications/v1/toggleVisibility", { id: ch.chatId }, null, {
+                            success: () =>
+                              setChats(
+                                chats.map((chat) => (chat.chatId === ch.chatId ? { ...chat, visible: !chat.visible } : chat))
+                              ),
+                            error: () => alert("Chyba"),
+                          })
+                        }
+                      >
+                        {ch.visible ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </>
+                  )}
+                  <EmailIcon
+                    onClick={() => testNotification(ch.chatId)}
+                    style={{ cursor: "pointer", marginRight: "24px" }}
+                  ></EmailIcon>
+                  {isAdmin ? (
+                    <>
+                      <TextField
+                        value={ch.name}
+                        onChange={(e) =>
+                          setChats(chats.map((chat) => (chat.chatId === ch.chatId ? { ...chat, name: e.target.value } : chat)))
+                        }
+                        onBlur={(e) => api.post("/notifications/v1/rename", { id: ch.chatId, name: ch.name }, null)}
+                      />
+                    </>
+                  ) : (
+                    ch.name
+                  )}{" "}
+                  ({ch.chatId})
+                </ListItem>
+              ))}
           </List>
         </CardContent>
       </Card>

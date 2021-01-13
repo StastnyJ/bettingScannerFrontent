@@ -9,6 +9,7 @@ import { api } from "../../../Utils/ApiService";
 
 type propsType = {
   createRequest: (apiUrl: string, url: string, displayUrl: string, keyword: string, email: string, category: string) => void;
+  isAdmin: boolean;
 };
 
 enum requestTypes {
@@ -30,7 +31,7 @@ export enum categoryTypes {
   MATCH = "MATCH",
 }
 
-export default function ({ createRequest }: propsType) {
+export default function ({ createRequest, isAdmin }: propsType) {
   const emptyRequest = { apiUrl: "/requests/v1/", url: "", displayUrl: "", keyword: "", category: categoryTypes.COMPETITION };
   const [newTipsportReq, setNewTipsportReq] = useState<{
     apiUrl: string;
@@ -43,17 +44,21 @@ export default function ({ createRequest }: propsType) {
   const [selectedChatId, setSelectedChat] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
 
-  const loadEmails = () => {
-    api.get("notifications/v1/getChats", undefined, {
-      success: (chats) => {
-        setChats(chats);
-        setSelectedChat(chats[0].chatId);
-      },
-      error: console.log,
-    });
+  const loadChats = () => {
+    api.get(
+      "notifications/v1/getChats",
+      { visibleOnly: false },
+      {
+        success: (chats: Chat[]) => {
+          setChats(chats);
+          setSelectedChat(chats.filter((ch) => isAdmin || ch.visible)[0].chatId);
+        },
+        error: console.log,
+      }
+    );
   };
 
-  useEffect(loadEmails, []);
+  useEffect(loadChats, []);
 
   return (
     <Card>
@@ -82,7 +87,7 @@ export default function ({ createRequest }: propsType) {
           <MatchDetailRequest
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            chats={chats}
+            chats={chats.filter((ch) => isAdmin || ch.visible)}
             selectedChatId={selectedChatId}
             setSelectedChat={setSelectedChat}
           />
@@ -90,7 +95,7 @@ export default function ({ createRequest }: propsType) {
           <SportsOfferRequest
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            chats={chats}
+            chats={chats.filter((ch) => isAdmin || ch.visible)}
             selectedChatId={selectedChatId}
             setSelectedChat={setSelectedChat}
           />
@@ -98,7 +103,7 @@ export default function ({ createRequest }: propsType) {
           <MatchesOfferRequest
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            chats={chats}
+            chats={chats.filter((ch) => isAdmin || ch.visible)}
             selectedChatId={selectedChatId}
             setSelectedChat={setSelectedChat}
           />
@@ -106,7 +111,7 @@ export default function ({ createRequest }: propsType) {
           <NewMatchesWatcher
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
-            chats={chats}
+            chats={chats.filter((ch) => isAdmin || ch.visible)}
             selectedChatId={selectedChatId}
             setSelectedChat={setSelectedChat}
           />
