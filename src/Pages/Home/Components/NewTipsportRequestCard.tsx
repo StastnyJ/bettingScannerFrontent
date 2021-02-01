@@ -4,6 +4,7 @@ import MatchDetailRequest from "./Tipsport/MatchDetailRequest";
 import SportsOfferRequest from "./Tipsport/SportsOfferRequest";
 import MatchesOfferRequest from "./Tipsport/MatchesOfferRequest";
 import NewMatchesWatcher from "./Tipsport/NewMatchesWatcher";
+import RepetedMatchDetails from "./Tipsport/RepetedMatchDetails";
 import { Chat } from "../../../Types/types";
 import { api } from "../../../Utils/ApiService";
 
@@ -17,6 +18,7 @@ enum requestTypes {
   SportsOffer,
   MatchesOffer,
   MatchesWatcher,
+  RepetedMatchDetails,
 }
 
 export enum categoryTypes {
@@ -80,6 +82,7 @@ export default function ({ createRequest, isAdmin }: propsType) {
             <MenuItem value={requestTypes.SportsOffer}>Tipsport sports offer</MenuItem>
             <MenuItem value={requestTypes.MatchesOffer}>Tipsport matches offer</MenuItem>
             <MenuItem value={requestTypes.MatchesWatcher}>Tipsport new matches watcher</MenuItem>
+            <MenuItem value={requestTypes.RepetedMatchDetails}>Tipsport repeated match details</MenuItem>
           </Select>
         </FormControl>
         <br />
@@ -107,8 +110,16 @@ export default function ({ createRequest, isAdmin }: propsType) {
             selectedChatId={selectedChatId}
             setSelectedChat={setSelectedChat}
           />
-        ) : (
+        ) : selected === requestTypes.MatchesWatcher ? (
           <NewMatchesWatcher
+            newTipsportReq={newTipsportReq}
+            setNewTipsportReq={setNewTipsportReq}
+            chats={chats.filter((ch) => isAdmin || ch.visible)}
+            selectedChatId={selectedChatId}
+            setSelectedChat={setSelectedChat}
+          />
+        ) : (
+          <RepetedMatchDetails
             newTipsportReq={newTipsportReq}
             setNewTipsportReq={setNewTipsportReq}
             chats={chats.filter((ch) => isAdmin || ch.visible)}

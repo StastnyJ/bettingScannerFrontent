@@ -43,7 +43,7 @@ export default function ({ requests, setRequests, deleteRequest, createRequest, 
           </TableHead>
           <TableBody>
             {requests
-              .filter((r) => isAdmin || r.visibe)
+              .filter((r) => (isAdmin || r.visibe) && r.requestType !== "GENERATED")
               .map((req) => (
                 <TableRow key={req.id}>
                   <TableCell>
@@ -51,7 +51,10 @@ export default function ({ requests, setRequests, deleteRequest, createRequest, 
                       {req.displayUrl}
                     </a>
                   </TableCell>
-                  <TableCell>{req.keyword || "Watching status"}</TableCell>
+                  <TableCell>
+                    {req.requestType === "REPEATED" && <b>Repeated </b>}
+                    {req.keyword || "Watching status"}
+                  </TableCell>
                   <TableCell>{req.chatId}</TableCell>
                   <TableCell>{req.finnished ? <Chip label="Finnished" color="primary" /> : <Chip label="Waiting" />}</TableCell>
                   <TableCell>

@@ -10,7 +10,7 @@ export interface Request {
   createdDate: string;
   tipsportCategory?: string;
   state?: string;
-  requestType: "NORMAL" | "STATE";
+  requestType: "NORMAL" | "STATE" | "GENERATED" | "REPEATED";
 }
 
 export type Match = {
