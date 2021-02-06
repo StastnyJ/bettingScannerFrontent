@@ -11,7 +11,7 @@ type propsType = {
 };
 
 export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
-  const tipsportApiUrl = "https://m.tipsport.cz/rest/offer/v2/sports?fromResults=false";
+  const tipsportApiUrl = "https://m.tipsport.cz/rest/offer/v3/sports?fromResults=false";
   if (newTipsportReq.url !== tipsportApiUrl)
     setNewTipsportReq({ ...newTipsportReq, url: tipsportApiUrl, displayUrl: "Sports offer in left menu", keyword: "" });
 
