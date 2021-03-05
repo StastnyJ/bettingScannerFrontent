@@ -6,6 +6,7 @@ import EmailIcon from "@material-ui/icons/Email";
 import { Chat } from "../../../Types/types";
 import { api } from "../../../Utils/ApiService";
 import { Delete, Visibility, VisibilityOff } from "@material-ui/icons";
+import AddDiscordChatClientModal from "../Modals/AddDiscordChatClientModal";
 
 export default function ({ isAdmin }: { isAdmin: boolean }) {
   const [chats, setChats] = useState<Chat[]>([]);
@@ -25,7 +26,7 @@ export default function ({ isAdmin }: { isAdmin: boolean }) {
   const removeChat = (chatId: String) => {
     api.delete("/notifications/v1/", { id: chatId }, null, {
       success: () => setChats(chats.filter((ch) => ch.chatId !== chatId)),
-      error: () => alert("chyba"),
+      error: () => alert("error"),
     });
   };
 
@@ -99,6 +100,7 @@ export default function ({ isAdmin }: { isAdmin: boolean }) {
                 </ListItem>
               ))}
           </List>
+          <AddDiscordChatClientModal addChat={(newChat) => setChats([...chats, newChat])} />
         </CardContent>
       </Card>
       <Snackbar open={openSuccess} autoHideDuration={6000} onClose={() => setOpenSuccess(false)}>

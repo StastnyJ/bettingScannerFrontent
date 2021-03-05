@@ -23,4 +23,6 @@ export type Chat = {
   chatId: string;
   name: string;
   visible: Boolean;
+  platform: string;
+  details: string;
 };
