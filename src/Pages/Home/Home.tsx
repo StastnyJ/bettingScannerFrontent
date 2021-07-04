@@ -9,7 +9,7 @@ import { api } from "../../Utils/ApiService";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function () {
-  const admins = ["facebook|2062643430536652", "facebook|3720102064722636"];
+  const admins = ["auth0|60e0de5c66d70f00715db4cf", "auth0|60e1f3d82910080070278aab"];
 
   const { isAuthenticated, user } = useAuth0();
   const [requests, setRequests] = useState<Request[]>([]);
