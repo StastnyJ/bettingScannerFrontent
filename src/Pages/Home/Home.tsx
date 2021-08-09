@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { Request } from "../../Types/types";
 import NewRequestCard from "./Components/NewRequestCard";
 import NewTipsportRequestCard from "./Components/NewTipsportRequestCard";
@@ -89,6 +89,23 @@ export default function () {
       )}
       <Grid item xs={12} lg={5} style={{ padding: 16 }}>
         <ChatsCard isAdmin={isAdmin} />
+        {isAdmin && (
+          <>
+            <br />
+            <Button
+              onClick={() =>
+                api.post("/requests/v1/clear", {}, null, {
+                  success: () => alert("State reset successfull"),
+                  error: () => alert("Error while reseting state"),
+                })
+              }
+              variant="contained"
+              color="primary"
+            >
+              Reset state
+            </Button>
+          </>
+        )}
       </Grid>
     </Grid>
   );
