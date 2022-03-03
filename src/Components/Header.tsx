@@ -1,10 +1,8 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, AppBar, Toolbar } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 
-export default function () {
+export default function Header() {
   const { loginWithRedirect, isAuthenticated, logout } = useAuth0();
 
   return (

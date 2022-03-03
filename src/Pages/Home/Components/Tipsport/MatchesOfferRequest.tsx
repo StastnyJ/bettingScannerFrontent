@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { TextField, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Chat } from "../../../../Types/types";
 
 type propsType = {
@@ -10,7 +10,7 @@ type propsType = {
   setSelectedChat: Dispatch<SetStateAction<string>>;
 };
 
-export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
+export default function MatchOfferRequest({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
   return (
     <>
       <TextField
@@ -19,10 +19,7 @@ export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedCha
         onChange={(e) =>
           setNewTipsportReq({
             ...newTipsportReq,
-            url:
-              e.target.value.length > 0
-                ? `https://betting-scanner-api.herokuapp.com/tipsport/v1/matches?url=${e.target.value}`
-                : "",
+            url: e.target.value.length > 0 ? `https://betting-scanner-api.herokuapp.com/tipsport/v1/matches?url=${e.target.value}` : "",
             displayUrl: e.target.value,
           })
         }

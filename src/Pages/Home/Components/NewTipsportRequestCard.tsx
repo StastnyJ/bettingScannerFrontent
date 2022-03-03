@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Typography, CardActions, Button, FormControl, Select, MenuItem } from "@material-ui/core";
+import { Card, CardContent, Typography, CardActions, Button, FormControl, Select, MenuItem } from "@mui/material";
 import MatchDetailRequest from "./Tipsport/MatchDetailRequest";
 import SportsOfferRequest from "./Tipsport/SportsOfferRequest";
 import MatchesOfferRequest from "./Tipsport/MatchesOfferRequest";
@@ -33,7 +33,7 @@ export enum categoryTypes {
   MATCH = "MATCH",
 }
 
-export default function ({ createRequest, isAdmin }: propsType) {
+export default function NewTipsportRequestCard({ createRequest, isAdmin }: propsType) {
   const emptyRequest = { apiUrl: "/requests/v1/", url: "", displayUrl: "", keyword: "", category: categoryTypes.COMPETITION };
   const [newTipsportReq, setNewTipsportReq] = useState<{
     apiUrl: string;
@@ -60,7 +60,7 @@ export default function ({ createRequest, isAdmin }: propsType) {
     );
   };
 
-  useEffect(loadChats, []);
+  useEffect(loadChats, [isAdmin]);
 
   return (
     <Card>

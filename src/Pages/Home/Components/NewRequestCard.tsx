@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-  CardActions,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@material-ui/core";
+import { Card, CardContent, TextField, Typography, CardActions, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { Chat } from "../../../Types/types";
 import { api } from "../../../Utils/ApiService";
 
@@ -19,7 +8,7 @@ type propsType = {
   isAdmin: boolean;
 };
 
-export default function ({ createRequest, isAdmin }: propsType) {
+export default function NewRequestCard({ createRequest, isAdmin }: propsType) {
   const [newReq, setNewReq] = useState({ url: "", keyword: "" });
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChatId, setSelectedChat] = useState<string>("");
@@ -38,25 +27,15 @@ export default function ({ createRequest, isAdmin }: propsType) {
     );
   };
 
-  useEffect(loadEmails, []);
+  useEffect(loadEmails, [isAdmin]);
 
   return (
     <Card>
       <CardContent>
         <Typography variant="h6">New request</Typography>
         <br />
-        <TextField
-          label="Url address"
-          value={newReq.url}
-          onChange={(e) => setNewReq({ ...newReq, url: e.target.value })}
-          style={{ width: "100%" }}
-        />
-        <TextField
-          label="Keyword"
-          value={newReq.keyword}
-          onChange={(e) => setNewReq({ ...newReq, keyword: e.target.value })}
-          style={{ width: "100%" }}
-        />
+        <TextField label="Url address" value={newReq.url} onChange={(e) => setNewReq({ ...newReq, url: e.target.value })} style={{ width: "100%" }} />
+        <TextField label="Keyword" value={newReq.keyword} onChange={(e) => setNewReq({ ...newReq, keyword: e.target.value })} style={{ width: "100%" }} />
         <br />
         <br />
         <FormControl style={{ width: "100%" }}>

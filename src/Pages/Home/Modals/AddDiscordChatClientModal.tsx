@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { Chat } from "../../../Types/types";
 import { api } from "../../../Utils/ApiService";
 
@@ -7,7 +7,7 @@ interface IProps {
   addChat: (chat: Chat) => void;
 }
 
-export default function ({ addChat }: IProps) {
+export default function AddDiscordChatClientModal({ addChat }: IProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [webhook, setWebhook] = useState("");

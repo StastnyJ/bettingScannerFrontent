@@ -1,20 +1,7 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Table,
-  TableRow,
-  TableCell,
-  TableHead,
-  TableBody,
-  Chip,
-  IconButton,
-} from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
+import { Card, CardContent, Typography, Table, TableRow, TableCell, TableHead, TableBody, Chip, IconButton } from "@mui/material";
 import { Request } from "../../../Types/types";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Visibility, VisibilityOff, Delete, Autorenew } from "@mui/icons-material";
 import { api } from "../../../Utils/ApiService";
 
 type propsType = {
@@ -25,7 +12,7 @@ type propsType = {
   isAdmin: boolean;
 };
 
-export default function ({ requests, setRequests, deleteRequest, createRequest, isAdmin }: propsType) {
+export default function RequestsCard({ requests, setRequests, deleteRequest, createRequest, isAdmin }: propsType) {
   return (
     <Card>
       <CardContent>
@@ -58,12 +45,9 @@ export default function ({ requests, setRequests, deleteRequest, createRequest, 
                   <TableCell>{req.chatId}</TableCell>
                   <TableCell>{req.finnished ? <Chip label="Finnished" color="primary" /> : <Chip label="Waiting" />}</TableCell>
                   <TableCell>
-                    <DeleteIcon
-                      style={{ color: "red", cursor: "pointer", float: "right" }}
-                      onClick={() => deleteRequest(req.id)}
-                    />
+                    <Delete style={{ color: "red", cursor: "pointer", float: "right" }} onClick={() => deleteRequest(req.id)} />
                     {req.finnished && (
-                      <AutorenewIcon
+                      <Autorenew
                         style={{ color: "blue", cursor: "pointer", float: "right" }}
                         onClick={() => createRequest("/requests/v1/", req.scanUrl, req.displayUrl, req.keyword, req.chatId)}
                       />
@@ -73,8 +57,7 @@ export default function ({ requests, setRequests, deleteRequest, createRequest, 
                         aria-label="toggle visibility"
                         onClick={() =>
                           api.post("/requests/v1/toggleVisibility", { id: req.id }, null, {
-                            success: () =>
-                              setRequests(requests.map((r) => (r.id === req.id ? { ...r, visibe: !r.visibe } : r))),
+                            success: () => setRequests(requests.map((r) => (r.id === req.id ? { ...r, visibe: !r.visibe } : r))),
                             error: () => alert("Chyba"),
                           })
                         }

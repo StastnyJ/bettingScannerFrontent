@@ -1,5 +1,5 @@
 import React, { useState, Dispatch, SetStateAction } from "react";
-import { TextField, List, ListItem, ListItemText, FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
+import { TextField, List, ListItem, ListItemText, FormControl, Select, InputLabel, MenuItem } from "@mui/material";
 import { Chat, Match } from "../../../../Types/types";
 import { api } from "../../../../Utils/ApiService";
 
@@ -23,7 +23,7 @@ enum categoryTypes {
   MATCH = "MATCH",
 }
 
-export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
+export default function MatchDetailRequest({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
   const [matches, setMatches] = useState<Match[]>([]);
   const [category, setCategory] = useState<categoryTypes>(categoryTypes.COMPETITION);
 

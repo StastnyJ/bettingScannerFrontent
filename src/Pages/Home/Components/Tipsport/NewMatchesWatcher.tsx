@@ -1,25 +1,18 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { TextField, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Chat } from "../../../../Types/types";
 import { categoryTypes } from "../NewTipsportRequestCard";
 
 type propsType = {
   newTipsportReq: { apiUrl: string; url: string; displayUrl: string; keyword: string; category?: categoryTypes };
-  setNewTipsportReq: (req: {
-    apiUrl: string;
-    url: string;
-    displayUrl: string;
-    keyword: string;
-    category?: categoryTypes;
-  }) => void;
+  setNewTipsportReq: (req: { apiUrl: string; url: string; displayUrl: string; keyword: string; category?: categoryTypes }) => void;
   chats: Chat[];
   selectedChatId: string;
   setSelectedChat: Dispatch<SetStateAction<string>>;
 };
 
-export default function ({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
-  if (newTipsportReq.apiUrl !== "/requests/v1/withStatus/")
-    setNewTipsportReq({ ...newTipsportReq, apiUrl: "/requests/v1/withStatus/" });
+export default function NewMatchesWatcher({ newTipsportReq, setNewTipsportReq, chats, selectedChatId, setSelectedChat }: propsType) {
+  if (newTipsportReq.apiUrl !== "/requests/v1/withStatus/") setNewTipsportReq({ ...newTipsportReq, apiUrl: "/requests/v1/withStatus/" });
 
   return (
     <>

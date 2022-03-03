@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid } from "@mui/material";
 import { Request } from "../../Types/types";
 import NewRequestCard from "./Components/NewRequestCard";
 import NewTipsportRequestCard from "./Components/NewTipsportRequestCard";
@@ -8,13 +8,13 @@ import ChatsCard from "./Components/ChatsCard";
 import { api } from "../../Utils/ApiService";
 import { useAuth0 } from "@auth0/auth0-react";
 
-export default function () {
+export default function Home() {
   const admins = ["auth0|60e0de5c66d70f00715db4cf", "auth0|60e1f3d82910080070278aab"];
 
   const { isAuthenticated, user } = useAuth0();
   const [requests, setRequests] = useState<Request[]>([]);
 
-  const isAdmin = isAuthenticated && admins.includes(user.sub);
+  const isAdmin = isAuthenticated && admins.includes(user?.sub || "");
   const loadRequests = () => {
     api.get(
       `requests/v1/all`,
@@ -26,14 +26,7 @@ export default function () {
     );
   };
 
-  const createRequest = (
-    apiUrl: string,
-    url: string,
-    displayUrl: string,
-    keyword?: string,
-    email?: string,
-    category?: string
-  ) => {
+  const createRequest = (apiUrl: string, url: string, displayUrl: string, keyword?: string, email?: string, category?: string) => {
     api.post(
       apiUrl,
       {
@@ -75,19 +68,8 @@ export default function () {
         <br />
         <br />
         <NewTipsportRequestCard createRequest={createRequest} isAdmin={isAdmin} />
-      </Grid>
-      {requests.length > 0 && (
-        <Grid item xs={12} lg={7} style={{ padding: 16 }}>
-          <RequestsCard
-            requests={requests}
-            deleteRequest={deleteRequest}
-            setRequests={setRequests}
-            createRequest={createRequest}
-            isAdmin={isAdmin}
-          />
-        </Grid>
-      )}
-      <Grid item xs={12} lg={5} style={{ padding: 16 }}>
+        <br />
+        <br />
         <ChatsCard isAdmin={isAdmin} />
         {isAdmin && (
           <>
@@ -107,6 +89,11 @@ export default function () {
           </>
         )}
       </Grid>
+      {requests.length > 0 && (
+        <Grid item xs={12} lg={7} style={{ padding: 16 }}>
+          <RequestsCard requests={requests} deleteRequest={deleteRequest} setRequests={setRequests} createRequest={createRequest} isAdmin={isAdmin} />
+        </Grid>
+      )}
     </Grid>
   );
 }
