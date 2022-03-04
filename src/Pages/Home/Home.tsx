@@ -7,6 +7,7 @@ import RequestsCard from "./Components/RequestsCard";
 import ChatsCard from "./Components/ChatsCard";
 import { api } from "../../Utils/ApiService";
 import { useAuth0 } from "@auth0/auth0-react";
+import SlavesCard from "./Components/SlavesCard";
 
 export default function Home() {
   const admins = ["auth0|60e0de5c66d70f00715db4cf", "auth0|60e1f3d82910080070278aab"];
@@ -71,6 +72,9 @@ export default function Home() {
         <br />
         <br />
         <ChatsCard isAdmin={isAdmin} />
+        <br />
+        <br />
+        {isAdmin && <SlavesCard />}
         {isAdmin && (
           <>
             <br />

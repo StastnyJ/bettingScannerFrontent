@@ -19,7 +19,7 @@ export default function MatchOfferRequest({ newTipsportReq, setNewTipsportReq, c
         onChange={(e) =>
           setNewTipsportReq({
             ...newTipsportReq,
-            url: e.target.value.length > 0 ? `https://betting-scanner-api.herokuapp.com/tipsport/v1/matches?url=${e.target.value}` : "",
+            url: e.target.value.length > 0 ? `https://api.scanner.stastnyjakub.com/master/v1/matches?url=${e.target.value}` : "",
             displayUrl: e.target.value,
           })
         }

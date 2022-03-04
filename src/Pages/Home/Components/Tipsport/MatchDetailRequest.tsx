@@ -30,7 +30,7 @@ export default function MatchDetailRequest({ newTipsportReq, setNewTipsportReq, 
   const loadMatches = (url: string) => {
     if (url.length >= 0) {
       api.get(
-        "tipsport/v1/matches",
+        "master/v1/matches",
         {
           url: url,
           categoryType: category,
@@ -50,8 +50,6 @@ export default function MatchDetailRequest({ newTipsportReq, setNewTipsportReq, 
       <FormControl style={{ width: "50%" }}>
         <InputLabel>Category type</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
           value={category}
           onChange={(e) => {
             setCategory(e.target.value as categoryTypes);

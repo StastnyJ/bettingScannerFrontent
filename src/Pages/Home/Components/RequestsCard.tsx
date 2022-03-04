@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography, Table, TableRow, TableCell, TableHead, TableBody, Chip, IconButton } from "@mui/material";
+import { Card, CardContent, Typography, Table, TableRow, TableCell, TableHead, TableBody, Chip } from "@mui/material";
 import { Request } from "../../../Types/types";
 import { Visibility, VisibilityOff, Delete, Autorenew } from "@mui/icons-material";
 import { api } from "../../../Utils/ApiService";
@@ -44,7 +44,7 @@ export default function RequestsCard({ requests, setRequests, deleteRequest, cre
                   </TableCell>
                   <TableCell>{req.chatId}</TableCell>
                   <TableCell>{req.finnished ? <Chip label="Finnished" color="primary" /> : <Chip label="Waiting" />}</TableCell>
-                  <TableCell>
+                  <TableCell style={{ minWidth: 64 }}>
                     <Delete style={{ color: "red", cursor: "pointer", float: "right" }} onClick={() => deleteRequest(req.id)} />
                     {req.finnished && (
                       <Autorenew
@@ -52,19 +52,28 @@ export default function RequestsCard({ requests, setRequests, deleteRequest, cre
                         onClick={() => createRequest("/requests/v1/", req.scanUrl, req.displayUrl, req.keyword, req.chatId)}
                       />
                     )}
-                    {isAdmin && (
-                      <IconButton
-                        aria-label="toggle visibility"
-                        onClick={() =>
-                          api.post("/requests/v1/toggleVisibility", { id: req.id }, null, {
-                            success: () => setRequests(requests.map((r) => (r.id === req.id ? { ...r, visibe: !r.visibe } : r))),
-                            error: () => alert("Chyba"),
-                          })
-                        }
-                      >
-                        {req.visibe ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    )}
+                    {isAdmin &&
+                      (req.visibe ? (
+                        <Visibility
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            api.post("/requests/v1/toggleVisibility", { id: req.id }, null, {
+                              success: () => setRequests(requests.map((r) => (r.id === req.id ? { ...r, visibe: !r.visibe } : r))),
+                              error: () => alert("Chyba"),
+                            })
+                          }
+                        />
+                      ) : (
+                        <VisibilityOff
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            api.post("/requests/v1/toggleVisibility", { id: req.id }, null, {
+                              success: () => setRequests(requests.map((r) => (r.id === req.id ? { ...r, visibe: !r.visibe } : r))),
+                              error: () => alert("Chyba"),
+                            })
+                          }
+                        />
+                      ))}
                   </TableCell>
                 </TableRow>
               ))}

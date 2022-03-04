@@ -26,3 +26,10 @@ export type Chat = {
   platform: string;
   details: string;
 };
+
+export type Slave = {
+  ipAddress: string;
+  port: number;
+  enabled: boolean;
+  lastUsed?: Date;
+};
