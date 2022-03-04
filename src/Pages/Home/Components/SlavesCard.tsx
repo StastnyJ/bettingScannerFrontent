@@ -36,7 +36,7 @@ export default function SlavesCard() {
                           alert(
                             `Server is running: ${res.active ? "YES" : "NO"}\nServer can communicate with TipSport: ${res.tipsportConnected ? "YES" : "NO"}`
                           ),
-                        error: () => alert("Při testování došlo k chyběs"),
+                        error: () => alert("Error while testing this server."),
                       })
                     }
                   >
